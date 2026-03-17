@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edison Barbershop | Look Sharp. Feel Sharp.</title>
+  <meta name="description" content="Edison Barbershop in Edison, NJ — classic cuts with modern vibes. Haircuts, fades, beard trims, hot towel shaves & more. Book your appointment today.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0d0d0d;
+      --gold: #c9a96e;
+      --white: #ffffff;
+      --gray: #888888;
+      --dark-surface: #1a1a1a;
+      --border: #2a2a2a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+
+    a { color: var(--gold); text-decoration: none; transition: opacity 0.3s; }
+    a:hover { opacity: 0.8; }
+
+    img { max-width: 100%; display: block; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 40px;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.15rem;
+      letter-spacing: 0.1em;
+      border: 2px solid var(--gold);
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .btn:hover { background: transparent; color: var(--gold); opacity: 1; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold);
+    }
+    .btn-outline:hover { background: var(--gold); color: var(--bg); }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .section-heading h2 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .section-heading .accent-line {
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      margin: 0 auto 16px;
+    }
+    .section-heading p {
+      color: var(--gray);
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    section { padding: 100px 0; }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 18px 0;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(13, 13, 13, 0.95);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+    }
+    .nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); opacity: 1; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 24px 80px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(201,169,110,0.04) 0%, transparent 50%);
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-block;
+      padding: 8px 24px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .hero h1 {
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+    .hero h1 .gold { color: var(--gold); }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--gray);
+      max-width: 500px;
+      margin: 0 auto 40px;
+      font-weight: 300;
+    }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── SERVICES ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--dark-surface);
+      border: 1px solid var(--border);
+      padding: 40px 28px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .service-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .service-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+    .service-card .price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .service-card p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+
+    /* ── BARBERS ── */
+    #barbers { background: var(--dark-surface); }
+    .barbers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 32px;
+    }
+    .barber-card { text-align: center; }
+    .barber-img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border: 3px solid var(--gold);
+    }
+    .barber-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+    .barber-card .role {
+      color: var(--gold);
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .barber-card p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      font-weight: 300;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    /* ── GALLERY ── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .gallery-item {
+      aspect-ratio: 1;
+      background: var(--dark-surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+    .gallery-item:hover { border-color: var(--gold); }
+    .gallery-placeholder {
+      text-align: center;
+      color: var(--gray);
+    }
+    .gallery-placeholder span {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .gallery-placeholder p { font-size: 0.85rem; }
+
+    /* ── REVIEWS ── */
+    #reviews { background: var(--dark-surface); }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+    .review-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 36px 32px;
+      position: relative;
+    }
+    .review-stars {
+      color: var(--gold);
+      font-size: 1rem;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+    .review-card blockquote {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      color: rgba(255,255,255,0.9);
+    }
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .review-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      color: var(--bg);
+    }
+    .review-author-info strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+    .review-author-info span {
+      color: var(--gray);
+      font-size: 0.8rem;
+    }
+
+    /* ── BOOKING ── */
+    .booking-wrapper {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray);
+      margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--dark-surface);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-submit { text-align: center; margin-top: 12px; }
+    .form-submit .btn { width: 100%; border: none; font-size: 1.1rem; padding: 16px; }
+
+    /* ── INFO (LOCATION + HOURS) ── */
+    #info { background: var(--dark-surface); }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .info-block h3 {
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      color: var(--gold);
+    }
+    .info-block p, .info-block address {
+      color: var(--gray);
+      font-style: normal;
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+    .info-block a { color: var(--gold); }
+    .hours-list {
+      list-style: none;
+    }
+    .hours-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--gray);
+      font-weight: 300;
+    }
+    .hours-list li:last-child { border-bottom: none; }
+    .hours-list .day { color: var(--white); font-weight: 400; }
+    .map-embed {
+      margin-top: 24px;
+      width: 100%;
+      height: 220px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .map-embed iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      filter: grayscale(1) invert(1) contrast(0.9) brightness(0.6);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: var(--gray);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 500;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .footer-social a {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: var(--gray);
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .footer-social a:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      opacity: 1;
+    }
+    .footer-copy {
+      color: #555;
+      font-size: 0.8rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-toggle { display: flex; }
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(13, 13, 13, 0.98);
+        flex-direction: column;
+        padding: 80px 40px 40px;
+        gap: 24px;
+        transition: right 0.3s;
+        backdrop-filter: blur(20px);
+      }
+      .nav-links.open { right: 0; }
+      .form-row { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; gap: 48px; }
+      section { padding: 72px 0; }
+      .section-heading { margin-bottom: 40px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 3rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <a href="#" class="nav-logo">Edison Barbershop</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#services" onclick="closeNav()">Services</a></li>
+        <li><a href="#barbers" onclick="closeNav()">Barbers</a></li>
+        <li><a href="#gallery" onclick="closeNav()">Gallery</a></li>
+        <li><a href="#reviews" onclick="closeNav()">Reviews</a></li>
+        <li><a href="#booking" onclick="closeNav()">Book Now</a></li>
+        <li><a href="#info" onclick="closeNav()">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Est. Edison, New Jersey</div>
+      <h1>Look Sharp.<br><span class="gold">Feel Sharp.</span></h1>
+      <p>Classic barbershop craftsmanship meets modern style. Walk in confident, walk out sharper.</p>
+      <div class="hero-buttons">
+        <a href="#booking" class="btn">Book Appointment</a>
+        <a href="#services" class="btn btn-outline">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="section-heading">
+        <div class="accent-line"></div>
+        <h2>Services &amp; Prices</h2>
+        <p>Premium grooming services tailored to your style</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon">✂️</span>
+          <h3>Haircut</h3>
+          <div class="price">$30</div>
+          <p>Precision cut with consultation, shampoo, and styling</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">💈</span>
+          <h3>Fade</h3>
+          <div class="price">$35</div>
+          <p>Skin, low, mid, or high fade — blended to perfection</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🧔</span>
+          <h3>Beard Trim</h3>
+          <div class="price">$20</div>
+          <p>Shape-up and detail work for a clean, defined beard</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🪒</span>
+          <h3>Hot Towel Shave</h3>
+          <div class="price">$40</div>
+          <p>Traditional straight razor shave with hot towel treatment</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">👦</span>
+          <h3>Kids Cut</h3>
+          <div class="price">$22</div>
+          <p>Gentle, patient cuts for kids 12 and under</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BARBERS -->
+  <section id="barbers">
+    <div class="container">
+      <div class="section-heading">
+        <div class="accent-line"></div>
+        <h2>Meet the Barbers</h2>
+        <p>Skilled craftsmen dedicated to your look</p>
+      </div>
+      <div class="barbers-grid">
+        <div class="barber-card">
+          <div class="barber-img">✂️</div>
+          <h3>Marco R.</h3>
+          <div class="role">Owner &amp; Master Barber</div>
+          <p>20+ years of experience. Specializes in classic cuts and straight razor work.</p>
+        </div>
+        <div class="barber-card">
+          <div class="barber-img">💈</div>
+          <h3>Jay T.</h3>
+          <div class="role">Senior Barber</div>
+          <p>Fade specialist with an eye for detail. Known for crisp lineups.</p>
+        </div>
+        <div class="barber-card">
+          <div class="barber-img">🪒</div>
+          <h3>Chris M.</h3>
+          <div class="role">Barber &amp; Stylist</div>
+          <p>Modern styles, textured cuts, and beard sculpting expert.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <div class="container">
+      <div class="section-heading">
+        <div class="accent-line"></div>
+        <h2>Our Work</h2>
+        <p>Fresh cuts from the chair</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>✂️</span><p>Classic Taper</p></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>💈</span><p>Low Skin Fade</p></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>🪒</span><p>Beard Sculpt</p></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>🔥</span><p>Mid Fade + Design</p></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>👔</span><p>Executive Cut</p></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>⭐</span><p>Fresh Lineup</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="container">
+      <div class="section-heading">
+        <div class="accent-line"></div>
+        <h2>What Clients Say</h2>
+        <p>Real reviews from real customers</p>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <blockquote>"Best barbershop in Edison, hands down. Marco always gets my fade perfect. Clean shop, great vibes, never going anywhere else."</blockquote>
+          <div class="review-author">
+            <div class="review-avatar">D</div>
+            <div class="review-author-info">
+              <strong>Daniel P.</strong>
+              <span>Regular since 2021</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <blockquote>"Took my son here for his first real haircut. They were so patient with him. He walked out looking fresh and feeling like a million bucks."</blockquote>
+          <div class="review-author">
+            <div class="review-avatar">S</div>
+            <div class="review-author-info">
+              <strong>Sarah K.</strong>
+              <span>Google Review</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <blockquote>"The hot towel shave is an experience. Walked in stressed, walked out a new man. These guys know what they're doing."</blockquote>
+          <div class="review-author">
+            <div class="review-avatar">R</div>
+            <div class="review-author-info">
+              <strong>Raj M.</strong>
+              <span>Yelp Review</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section id="booking">
+    <div class="container">
+      <div class="section-heading">
+        <div class="accent-line"></div>
+        <h2>Book an Appointment</h2>
+        <p>Reserve your chair — walk-ins also welcome</p>
+      </div>
+      <div class="booking-wrapper">
+        <form id="bookingForm" onsubmit="handleBooking(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">First Name</label>
+              <input type="text" id="fname" name="fname" required placeholder="John">
+            </div>
+            <div class="form-group">
+              <label for="lname">Last Name</label>
+              <input type="text" id="lname" name="lname" required placeholder="Doe">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" required placeholder="(732) 555-0123">
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="john@email.com">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="service">Service</label>
+              <select id="service" name="service" required>
+                <option value="" disabled selected>Select a service</option>
+                <option value="haircut">Haircut — $30</option>
+                <option value="fade">Fade — $35</option>
+                <option value="beard">Beard Trim — $20</option>
+                <option value="shave">Hot Towel Shave — $40</option>
+                <option value="kids">Kids Cut — $22</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="barber">Preferred Barber</label>
+              <select id="barber" name="barber">
+                <option value="" selected>No preference</option>
+                <option value="marco">Marco R.</option>
+                <option value="jay">Jay T.</option>
+                <option value="chris">Chris M.</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="date">Preferred Date</label>
+              <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+              <label for="time">Preferred Time</label>
+              <select id="time" name="time" required>
+                <option value="" disabled selected>Select a time</option>
+                <option value="09:00">9:00 AM</option>
+                <option value="09:30">9:30 AM</option>
+                <option value="10:00">10:00 AM</option>
+                <option value="10:30">10:30 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="11:30">11:30 AM</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="12:30">12:30 PM</option>
+                <option value="13:00">1:00 PM</option>
+                <option value="13:30">1:30 PM</option>
+                <option value="14:00">2:00 PM</option>
+                <option value="14:30">2:30 PM</option>
+                <option value="15:00">3:00 PM</option>
+                <option value="15:30">3:30 PM</option>
+                <option value="16:00">4:00 PM</option>
+                <option value="16:30">4:30 PM</option>
+                <option value="17:00">5:00 PM</option>
+                <option value="17:30">5:30 PM</option>
+                <option value="18:00">6:00 PM</option>
+                <option value="18:30">6:30 PM</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="notes">Notes (optional)</label>
+            <textarea id="notes" name="notes" placeholder="Any special requests or preferences..."></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" class="btn">Request Appointment</button>
+          </div>
+        </form>
+        <p id="formSuccess" style="display:none; text-align:center; margin-top:24px; color:var(--gold); font-size:1.1rem;">
+          ✓ Request sent! We'll confirm your appointment shortly.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION & HOURS -->
+  <section id="info">
+    <div class="container">
+      <div class="section-heading">
+        <div class="accent-line"></div>
+        <h2>Visit Us</h2>
+        <p>Edison, New Jersey</p>
+      </div>
+      <div class="info-grid">
+        <div class="info-block">
+          <h3>Location</h3>
+          <address>
+            Edison Barbershop<br>
+            1234 Oak Tree Road<br>
+            Edison, NJ 08820
+          </address>
+          <p style="margin-top:16px;">
+            <a href="tel:+17325550123">(732) 555-0123</a><br>
+            <a href="mailto:info@edisonbarbershop.com">info@edisonbarbershop.com</a>
+          </p>
+          <div class="map-embed">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48533.97!2d-74.37!3d40.52!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c3b61fa0882f89%3A0x58aa347402fdb711!2sEdison%2C%20NJ!5e0!3m2!1sen!2sus!4v1"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Edison Barbershop location map">
+            </iframe>
+          </div>
+        </div>
+        <div class="info-block">
+          <h3>Hours</h3>
+          <ul class="hours-list">
+            <li><span class="day">Monday</span><span>9:00 AM – 7:00 PM</span></li>
+            <li><span class="day">Tuesday</span><span>9:00 AM – 7:00 PM</span></li>
+            <li><span class="day">Wednesday</span><span>9:00 AM – 7:00 PM</span></li>
+            <li><span class="day">Thursday</span><span>9:00 AM – 8:00 PM</span></li>
+            <li><span class="day">Friday</span><span>9:00 AM – 8:00 PM</span></li>
+            <li><span class="day">Saturday</span><span>8:00 AM – 6:00 PM</span></li>
+            <li><span class="day">Sunday</span><span>9:00 AM – 3:00 PM</span></li>
+          </ul>
+          <p style="margin-top:20px; font-size:0.9rem;">Walk-ins welcome. Appointments recommended on weekends.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-logo">Edison Barbershop</div>
+      <ul class="footer-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#barbers">Barbers</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#booking">Book Now</a></li>
+        <li><a href="#info">Contact</a></li>
+      </ul>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="TikTok">TT</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Edison Barbershop. All rights reserved. Edison, NJ.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      navToggle.classList.toggle('active');
+    });
+
+    function closeNav() {
+      navLinks.classList.remove('open');
+      navToggle.classList.remove('active');
+    }
+
+    // Close mobile nav on outside click
+    document.addEventListener('click', (e) => {
+      if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+        closeNav();
+      }
+    });
+
+    // Set minimum date to today
+    const dateInput = document.getElementById('date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+
+    // Booking form handler
+    function handleBooking(e) {
+      e.preventDefault();
+      const form = document.getElementById('bookingForm');
+      const success = document.getElementById('formSuccess');
+      form.style.display = 'none';
+      success.style.display = 'block';
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Smooth reveal on scroll
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.service-card, .barber-card, .gallery-item, .review-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
