@@ -14,6 +14,7 @@
     :root {
       --bg: #0d0d0d;
       --gold: #c9a96e;
+      --gold-glow: rgba(201, 169, 110, 0.4);
       --white: #ffffff;
       --gray: #888888;
       --dark-surface: #1a1a1a;
@@ -28,6 +29,7 @@
       color: var(--white);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -53,9 +55,15 @@
       letter-spacing: 0.1em;
       border: 2px solid var(--gold);
       cursor: pointer;
-      transition: background 0.3s, color 0.3s;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
     }
-    .btn:hover { background: transparent; color: var(--gold); opacity: 1; }
+    .btn:hover {
+      background: transparent;
+      color: var(--gold);
+      opacity: 1;
+      box-shadow: 0 0 30px var(--gold-glow);
+      transform: translateY(-2px);
+    }
 
     .btn-outline {
       background: transparent;
@@ -86,6 +94,56 @@
 
     section { padding: 100px 0; }
 
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Stagger delays */
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+    .stagger-5 { transition-delay: 0.5s; }
+    .stagger-6 { transition-delay: 0.6s; }
+
     /* ── NAV ── */
     .nav {
       position: fixed;
@@ -94,12 +152,13 @@
       width: 100%;
       z-index: 1000;
       padding: 18px 0;
-      transition: background 0.3s, box-shadow 0.3s;
+      transition: background 0.4s, box-shadow 0.4s, padding 0.4s;
     }
     .nav.scrolled {
       background: rgba(13, 13, 13, 0.95);
       box-shadow: 0 2px 20px rgba(0,0,0,0.5);
       backdrop-filter: blur(10px);
+      padding: 12px 0;
     }
     .nav .container {
       display: flex;
@@ -120,8 +179,20 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: width 0.3s;
     }
     .nav-links a:hover { color: var(--gold); opacity: 1; }
+    .nav-links a:hover::after { width: 100%; }
 
     .nav-toggle {
       display: none;
@@ -154,15 +225,38 @@
       overflow: hidden;
       padding: 120px 24px 80px;
     }
-    .hero::before {
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.1);
+      will-change: transform;
+    }
+    .hero-bg::after {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 80%, rgba(201,169,110,0.04) 0%, transparent 50%);
+      background: linear-gradient(
+        to bottom,
+        rgba(13, 13, 13, 0.7) 0%,
+        rgba(13, 13, 13, 0.5) 40%,
+        rgba(13, 13, 13, 0.8) 100%
+      );
     }
-    .hero-content { position: relative; z-index: 1; }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      animation: heroFadeIn 1.2s ease-out;
+    }
+    @keyframes heroFadeIn {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
     .hero-badge {
       display: inline-block;
       padding: 8px 24px;
@@ -173,6 +267,11 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       margin-bottom: 32px;
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(201, 169, 110, 0.3); }
+      50% { box-shadow: 0 0 20px 4px rgba(201, 169, 110, 0.15); }
     }
     .hero h1 {
       font-size: clamp(3.5rem, 10vw, 7rem);
@@ -189,6 +288,56 @@
     }
     .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
+    /* Floating particles */
+    .particles {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0;
+      animation: particleFloat linear infinite;
+    }
+    @keyframes particleFloat {
+      0% { opacity: 0; transform: translateY(100vh) rotate(0deg); }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(-10vh) rotate(720deg); }
+    }
+
+    /* ── STATS COUNTER ── */
+    .stats-bar {
+      background: var(--dark-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+    .stat-item h3 {
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .stat-item p {
+      color: var(--gray);
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
     /* ── SERVICES ── */
     .services-grid {
       display: grid;
@@ -200,32 +349,48 @@
       border: 1px solid var(--border);
       padding: 40px 28px;
       text-align: center;
-      transition: border-color 0.3s, transform 0.3s;
+      transition: border-color 0.4s, transform 0.4s, box-shadow 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, var(--gold-glow), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
     }
     .service-card:hover {
       border-color: var(--gold);
-      transform: translateY(-4px);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px var(--gold-glow);
     }
+    .service-card:hover::before { opacity: 0.15; }
     .service-icon {
       font-size: 2rem;
       margin-bottom: 20px;
       display: block;
+      position: relative;
     }
     .service-card h3 {
       font-size: 1.4rem;
       margin-bottom: 8px;
       color: var(--white);
+      position: relative;
     }
     .service-card .price {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.8rem;
       color: var(--gold);
       margin-bottom: 12px;
+      position: relative;
     }
     .service-card p {
       color: var(--gray);
       font-size: 0.9rem;
       font-weight: 300;
+      position: relative;
     }
 
     /* ── BARBERS ── */
@@ -236,17 +401,28 @@
       gap: 32px;
     }
     .barber-card { text-align: center; }
-    .barber-img {
-      width: 180px;
-      height: 180px;
+    .barber-img-wrapper {
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
       margin: 0 auto 24px;
-      background: var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
+      overflow: hidden;
       border: 3px solid var(--gold);
+      transition: transform 0.5s, box-shadow 0.5s;
+      position: relative;
+    }
+    .barber-img-wrapper:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 40px var(--gold-glow);
+    }
+    .barber-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .barber-img-wrapper:hover img {
+      transform: scale(1.1);
     }
     .barber-card h3 {
       font-size: 1.5rem;
@@ -280,23 +456,39 @@
       border: 1px solid var(--border);
       overflow: hidden;
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       cursor: pointer;
-      transition: border-color 0.3s;
+      transition: border-color 0.4s, box-shadow 0.4s;
     }
-    .gallery-item:hover { border-color: var(--gold); }
-    .gallery-placeholder {
-      text-align: center;
-      color: var(--gray);
+    .gallery-item:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 30px rgba(201, 169, 110, 0.2);
     }
-    .gallery-placeholder span {
-      font-size: 2.5rem;
-      display: block;
-      margin-bottom: 8px;
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    .gallery-placeholder p { font-size: 0.85rem; }
+    .gallery-item:hover img {
+      transform: scale(1.12);
+    }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,13,13,0.8) 0%, transparent 50%);
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay p {
+      color: var(--white);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+    }
 
     /* ── REVIEWS ── */
     #reviews { background: var(--dark-surface); }
@@ -310,6 +502,12 @@
       border: 1px solid var(--border);
       padding: 36px 32px;
       position: relative;
+      transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
+    }
+    .review-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 30px var(--gold-glow);
+      transform: translateY(-4px);
     }
     .review-stars {
       color: var(--gold);
@@ -350,6 +548,57 @@
       font-size: 0.8rem;
     }
 
+    /* ── FAQ ACCORDION ── */
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      color: var(--white);
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .faq-question:hover { color: var(--gold); }
+    .faq-icon {
+      font-size: 1.5rem;
+      color: var(--gold);
+      transition: transform 0.4s;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+    .faq-item.active .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  padding 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      padding: 0 0;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+      padding: 0 0 20px;
+    }
+    .faq-answer p {
+      color: var(--gray);
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
     /* ── BOOKING ── */
     .booking-wrapper {
       max-width: 640px;
@@ -380,7 +629,7 @@
       color: var(--white);
       font-family: 'Roboto', sans-serif;
       font-size: 0.95rem;
-      transition: border-color 0.3s;
+      transition: border-color 0.3s, box-shadow 0.3s;
       -webkit-appearance: none;
       appearance: none;
       border-radius: 0;
@@ -390,6 +639,7 @@
     .form-group textarea:focus {
       outline: none;
       border-color: var(--gold);
+      box-shadow: 0 0 15px rgba(201, 169, 110, 0.15);
     }
     .form-group select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
@@ -497,12 +747,14 @@
       justify-content: center;
       font-size: 1.1rem;
       color: var(--gray);
-      transition: border-color 0.3s, color 0.3s;
+      transition: border-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
     }
     .footer-social a:hover {
       border-color: var(--gold);
       color: var(--gold);
       opacity: 1;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px var(--gold-glow);
     }
     .footer-copy {
       color: #555;
@@ -528,6 +780,7 @@
       .nav-links.open { right: 0; }
       .form-row { grid-template-columns: 1fr; }
       .info-grid { grid-template-columns: 1fr; gap: 48px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
       section { padding: 72px 0; }
       .section-heading { margin-bottom: 40px; }
     }
@@ -537,6 +790,7 @@
       .services-grid { grid-template-columns: 1fr; }
       .reviews-grid { grid-template-columns: 1fr; }
       .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
     }
   </style>
 </head>
@@ -551,6 +805,7 @@
         <li><a href="#barbers" onclick="closeNav()">Barbers</a></li>
         <li><a href="#gallery" onclick="closeNav()">Gallery</a></li>
         <li><a href="#reviews" onclick="closeNav()">Reviews</a></li>
+        <li><a href="#faq" onclick="closeNav()">FAQ</a></li>
         <li><a href="#booking" onclick="closeNav()">Book Now</a></li>
         <li><a href="#info" onclick="closeNav()">Contact</a></li>
       </ul>
@@ -562,6 +817,10 @@
 
   <!-- HERO -->
   <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=80" alt="Edison Barbershop interior" loading="eager">
+    </div>
+    <div class="particles" id="particles"></div>
     <div class="hero-content">
       <div class="hero-badge">Est. Edison, New Jersey</div>
       <h1>Look Sharp.<br><span class="gold">Feel Sharp.</span></h1>
@@ -573,40 +832,64 @@
     </div>
   </section>
 
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item reveal stagger-1">
+          <h3><span class="counter" data-target="20">0</span>+</h3>
+          <p>Years Experience</p>
+        </div>
+        <div class="stat-item reveal stagger-2">
+          <h3><span class="counter" data-target="15000">0</span>+</h3>
+          <p>Happy Clients</p>
+        </div>
+        <div class="stat-item reveal stagger-3">
+          <h3><span class="counter" data-target="5">0</span></h3>
+          <p>Star Rating</p>
+        </div>
+        <div class="stat-item reveal stagger-4">
+          <h3><span class="counter" data-target="3">0</span></h3>
+          <p>Expert Barbers</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- SERVICES -->
   <section id="services">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading reveal">
         <div class="accent-line"></div>
         <h2>Services &amp; Prices</h2>
         <p>Premium grooming services tailored to your style</p>
       </div>
       <div class="services-grid">
-        <div class="service-card">
+        <div class="service-card reveal stagger-1">
           <span class="service-icon">✂️</span>
           <h3>Haircut</h3>
           <div class="price">$30</div>
           <p>Precision cut with consultation, shampoo, and styling</p>
         </div>
-        <div class="service-card">
+        <div class="service-card reveal stagger-2">
           <span class="service-icon">💈</span>
           <h3>Fade</h3>
           <div class="price">$35</div>
           <p>Skin, low, mid, or high fade — blended to perfection</p>
         </div>
-        <div class="service-card">
+        <div class="service-card reveal stagger-3">
           <span class="service-icon">🧔</span>
           <h3>Beard Trim</h3>
           <div class="price">$20</div>
           <p>Shape-up and detail work for a clean, defined beard</p>
         </div>
-        <div class="service-card">
+        <div class="service-card reveal stagger-4">
           <span class="service-icon">🪒</span>
           <h3>Hot Towel Shave</h3>
           <div class="price">$40</div>
           <p>Traditional straight razor shave with hot towel treatment</p>
         </div>
-        <div class="service-card">
+        <div class="service-card reveal stagger-5">
           <span class="service-icon">👦</span>
           <h3>Kids Cut</h3>
           <div class="price">$22</div>
@@ -619,26 +902,32 @@
   <!-- BARBERS -->
   <section id="barbers">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading reveal">
         <div class="accent-line"></div>
         <h2>Meet the Barbers</h2>
         <p>Skilled craftsmen dedicated to your look</p>
       </div>
       <div class="barbers-grid">
-        <div class="barber-card">
-          <div class="barber-img">✂️</div>
+        <div class="barber-card reveal stagger-1">
+          <div class="barber-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="Marco R. - Owner and Master Barber" loading="lazy">
+          </div>
           <h3>Marco R.</h3>
           <div class="role">Owner &amp; Master Barber</div>
           <p>20+ years of experience. Specializes in classic cuts and straight razor work.</p>
         </div>
-        <div class="barber-card">
-          <div class="barber-img">💈</div>
+        <div class="barber-card reveal stagger-2">
+          <div class="barber-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80" alt="Jay T. - Senior Barber" loading="lazy">
+          </div>
           <h3>Jay T.</h3>
           <div class="role">Senior Barber</div>
           <p>Fade specialist with an eye for detail. Known for crisp lineups.</p>
         </div>
-        <div class="barber-card">
-          <div class="barber-img">🪒</div>
+        <div class="barber-card reveal stagger-3">
+          <div class="barber-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80" alt="Chris M. - Barber and Stylist" loading="lazy">
+          </div>
           <h3>Chris M.</h3>
           <div class="role">Barber &amp; Stylist</div>
           <p>Modern styles, textured cuts, and beard sculpting expert.</p>
@@ -650,29 +939,35 @@
   <!-- GALLERY -->
   <section id="gallery">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading reveal">
         <div class="accent-line"></div>
         <h2>Our Work</h2>
         <p>Fresh cuts from the chair</p>
       </div>
       <div class="gallery-grid">
-        <div class="gallery-item">
-          <div class="gallery-placeholder"><span>✂️</span><p>Classic Taper</p></div>
+        <div class="gallery-item reveal-scale stagger-1">
+          <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&q=80" alt="Fresh fade haircut" loading="lazy">
+          <div class="gallery-overlay"><p>Clean Fade</p></div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder"><span>💈</span><p>Low Skin Fade</p></div>
+        <div class="gallery-item reveal-scale stagger-2">
+          <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&q=80" alt="Beard trim in progress" loading="lazy">
+          <div class="gallery-overlay"><p>Beard Trim</p></div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder"><span>🪒</span><p>Beard Sculpt</p></div>
+        <div class="gallery-item reveal-scale stagger-3">
+          <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600&q=80" alt="Barbershop interior" loading="lazy">
+          <div class="gallery-overlay"><p>The Shop</p></div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder"><span>🔥</span><p>Mid Fade + Design</p></div>
+        <div class="gallery-item reveal-scale stagger-4">
+          <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600&q=80" alt="Barbershop atmosphere" loading="lazy">
+          <div class="gallery-overlay"><p>Classic Vibes</p></div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder"><span>👔</span><p>Executive Cut</p></div>
+        <div class="gallery-item reveal-scale stagger-5">
+          <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&q=80" alt="Precision cut" loading="lazy">
+          <div class="gallery-overlay"><p>Precision Cut</p></div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder"><span>⭐</span><p>Fresh Lineup</p></div>
+        <div class="gallery-item reveal-scale stagger-6">
+          <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&q=80" alt="Styling session" loading="lazy">
+          <div class="gallery-overlay"><p>Fresh Lineup</p></div>
         </div>
       </div>
     </div>
@@ -681,13 +976,13 @@
   <!-- REVIEWS -->
   <section id="reviews">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading reveal">
         <div class="accent-line"></div>
         <h2>What Clients Say</h2>
         <p>Real reviews from real customers</p>
       </div>
       <div class="reviews-grid">
-        <div class="review-card">
+        <div class="review-card reveal stagger-1">
           <div class="review-stars">★★★★★</div>
           <blockquote>"Best barbershop in Edison, hands down. Marco always gets my fade perfect. Clean shop, great vibes, never going anywhere else."</blockquote>
           <div class="review-author">
@@ -698,7 +993,7 @@
             </div>
           </div>
         </div>
-        <div class="review-card">
+        <div class="review-card reveal stagger-2">
           <div class="review-stars">★★★★★</div>
           <blockquote>"Took my son here for his first real haircut. They were so patient with him. He walked out looking fresh and feeling like a million bucks."</blockquote>
           <div class="review-author">
@@ -709,7 +1004,7 @@
             </div>
           </div>
         </div>
-        <div class="review-card">
+        <div class="review-card reveal stagger-3">
           <div class="review-stars">★★★★★</div>
           <blockquote>"The hot towel shave is an experience. Walked in stressed, walked out a new man. These guys know what they're doing."</blockquote>
           <div class="review-author">
@@ -724,15 +1019,73 @@
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-heading reveal">
+        <div class="accent-line"></div>
+        <h2>Common Questions</h2>
+        <p>Everything you need to know</p>
+      </div>
+      <div class="faq-list reveal">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Do I need an appointment or can I walk in?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Walk-ins are always welcome! However, we recommend booking an appointment on weekends and evenings to guarantee your spot. You can book right here on our website.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            How long does a typical haircut take?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>A standard haircut takes about 30-40 minutes. Fades and more detailed work may take up to 45 minutes. Hot towel shaves run about 30 minutes.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            What forms of payment do you accept?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>We accept cash, all major credit/debit cards, Apple Pay, Google Pay, and Venmo. Whatever works best for you.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Can I request a specific barber?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Absolutely! You can select your preferred barber when booking online or just let us know when you walk in. If they're available, they're yours.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Do you offer services for kids?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! We offer kids cuts for children 12 and under at $22. Our barbers are patient and experienced with young clients.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- BOOKING -->
   <section id="booking">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading reveal">
         <div class="accent-line"></div>
         <h2>Book an Appointment</h2>
         <p>Reserve your chair — walk-ins also welcome</p>
       </div>
-      <div class="booking-wrapper">
+      <div class="booking-wrapper reveal">
         <form id="bookingForm" onsubmit="handleBooking(event)">
           <div class="form-row">
             <div class="form-group">
@@ -826,13 +1179,13 @@
   <!-- LOCATION & HOURS -->
   <section id="info">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading reveal">
         <div class="accent-line"></div>
         <h2>Visit Us</h2>
         <p>Edison, New Jersey</p>
       </div>
       <div class="info-grid">
-        <div class="info-block">
+        <div class="info-block reveal-left">
           <h3>Location</h3>
           <address>
             Edison Barbershop<br>
@@ -853,7 +1206,7 @@
             </iframe>
           </div>
         </div>
-        <div class="info-block">
+        <div class="info-block reveal-right">
           <h3>Hours</h3>
           <ul class="hours-list">
             <li><span class="day">Monday</span><span>9:00 AM – 7:00 PM</span></li>
@@ -879,6 +1232,7 @@
         <li><a href="#barbers">Barbers</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="#booking">Book Now</a></li>
         <li><a href="#info">Contact</a></li>
       </ul>
@@ -892,13 +1246,13 @@
   </footer>
 
   <script>
-    // Nav scroll effect
+    // ── Nav scroll effect ──
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 60);
     });
 
-    // Mobile nav toggle
+    // ── Mobile nav toggle ──
     const navToggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
 
@@ -912,19 +1266,94 @@
       navToggle.classList.remove('active');
     }
 
-    // Close mobile nav on outside click
     document.addEventListener('click', (e) => {
       if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
         closeNav();
       }
     });
 
-    // Set minimum date to today
+    // ── Parallax hero ──
+    const heroBg = document.querySelector('.hero-bg img');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      if (scrolled < window.innerHeight) {
+        heroBg.style.transform = 'scale(1.1) translateY(' + (scrolled * 0.3) + 'px)';
+      }
+    });
+
+    // ── Floating particles ──
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.width = (Math.random() * 3 + 1) + 'px';
+      particle.style.height = particle.style.width;
+      particle.style.animationDuration = (Math.random() * 8 + 6) + 's';
+      particle.style.animationDelay = (Math.random() * 10) + 's';
+      particlesContainer.appendChild(particle);
+    }
+
+    // ── Scroll reveal ──
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+      revealObserver.observe(el);
+    });
+
+    // ── Animated counters ──
+    let countersStarted = false;
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !countersStarted) {
+          countersStarted = true;
+          document.querySelectorAll('.counter').forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            const duration = 2000;
+            const start = performance.now();
+
+            function updateCounter(now) {
+              const elapsed = now - start;
+              const progress = Math.min(elapsed / duration, 1);
+              // Ease out cubic
+              const eased = 1 - Math.pow(1 - progress, 3);
+              counter.textContent = Math.floor(eased * target).toLocaleString();
+              if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+              } else {
+                counter.textContent = target.toLocaleString();
+              }
+            }
+            requestAnimationFrame(updateCounter);
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.stats-bar').forEach(el => counterObserver.observe(el));
+
+    // ── FAQ accordion ──
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const isActive = item.classList.contains('active');
+      // Close all
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      // Toggle current
+      if (!isActive) item.classList.add('active');
+    }
+
+    // ── Set minimum date to today ──
     const dateInput = document.getElementById('date');
     const today = new Date().toISOString().split('T')[0];
     dateInput.setAttribute('min', today);
 
-    // Booking form handler
+    // ── Booking form handler ──
     function handleBooking(e) {
       e.preventDefault();
       const form = document.getElementById('bookingForm');
@@ -933,24 +1362,6 @@
       success.style.display = 'block';
       success.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-
-    // Smooth reveal on scroll
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.service-card, .barber-card, .gallery-item, .review-card').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(24px)';
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-      observer.observe(el);
-    });
   </script>
 
 </body>
