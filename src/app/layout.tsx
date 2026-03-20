@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-bebas-neue",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: "400",
 });
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: "Edison Barbershop | Sharp Cuts. Clean Lines. | Edison, NJ",
   description:
-    "Edison NJ's premier barbershop. Walk-ins welcome with less than 10 minute wait. Classic haircuts, skin fades, beard trims, hot towel shaves. 4.9★ rated with 450+ reviews.",
+    "Edison NJ's premier barbershop. Walk-ins welcome. Classic haircuts, skin fades, beard trims, hot towel shaves. 4.9★ rated with 450+ reviews. Est. 2016.",
   keywords: [
     "barbershop Edison NJ",
     "haircut Edison",
@@ -29,6 +29,7 @@ export const metadata: Metadata = {
     "barber near me",
     "Edison barber",
     "mens haircut Edison NJ",
+    "hot towel shave Edison",
   ],
   openGraph: {
     title: "Edison Barbershop | Sharp Cuts. Clean Lines.",
@@ -47,13 +48,15 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BarberShop",
   name: "Edison Barbershop",
-  image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=80",
+  image:
+    "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=80",
   telephone: "(732) 555-0456",
-  email: "edisonbarbershop@example.com",
   address: {
     "@type": "PostalAddress",
+    streetAddress: "123 Main Street",
     addressLocality: "Edison",
     addressRegion: "NJ",
+    postalCode: "08817",
     addressCountry: "US",
   },
   geo: {
@@ -71,7 +74,14 @@ const jsonLd = {
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
       opens: "09:00",
       closes: "20:00",
     },
@@ -86,14 +96,54 @@ const jsonLd = {
     "@type": "OfferCatalog",
     name: "Barbershop Services",
     itemListElement: [
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Classic Haircut" }, price: "25.00", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Skin Fade" }, price: "30.00", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Beard Trim" }, price: "15.00", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Hot Towel Shave" }, price: "25.00", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Kids Cut" }, price: "18.00", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Haircut + Beard Combo" }, price: "35.00", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Hair Design / Line Up" }, price: "35.00", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Senior Cut" }, price: "20.00", priceCurrency: "USD" },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Classic Haircut" },
+        price: "25.00",
+        priceCurrency: "USD",
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Skin Fade" },
+        price: "30.00",
+        priceCurrency: "USD",
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Beard Trim" },
+        price: "15.00",
+        priceCurrency: "USD",
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Hot Towel Shave" },
+        price: "25.00",
+        priceCurrency: "USD",
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Haircut + Beard Combo" },
+        price: "35.00",
+        priceCurrency: "USD",
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Kids Cut" },
+        price: "18.00",
+        priceCurrency: "USD",
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Hair Design / Line Up" },
+        price: "35.00",
+        priceCurrency: "USD",
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Senior Cut" },
+        price: "20.00",
+        priceCurrency: "USD",
+      },
     ],
   },
 };
@@ -106,7 +156,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} antialiased`}
+      className={`${bebasNeue.variable} ${inter.variable} antialiased`}
     >
       <head>
         <script

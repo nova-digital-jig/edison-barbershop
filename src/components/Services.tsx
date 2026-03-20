@@ -1,96 +1,100 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const services = [
-  { num: "01", name: "Classic Haircut", price: "$25" },
-  { num: "02", name: "Skin Fade", price: "$30" },
-  { num: "03", name: "Beard Trim", price: "$15" },
-  { num: "04", name: "Hot Towel Shave", price: "$25" },
-  { num: "05", name: "Kids Cut", desc: "Under 12", price: "$18" },
-  { num: "06", name: "Haircut + Beard Combo", price: "$35" },
-  { num: "07", name: "Hair Design / Line Up", price: "$35" },
-  { num: "08", name: "Senior Cut", desc: "65+", price: "$20" },
+  { name: "Classic Haircut", price: "$25" },
+  { name: "Skin Fade", price: "$30" },
+  { name: "Beard Trim", price: "$15" },
+  { name: "Hot Towel Shave", price: "$25" },
+  { name: "Haircut + Beard", price: "$35" },
+  { name: "Kids Cut (under 12)", price: "$18" },
+  { name: "Hair Design / Line Up", price: "$35" },
+  { name: "Senior Cut (65+)", price: "$20" },
 ];
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".service-row",
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          ease: "power3.out",
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 75%",
-          },
-        }
-      );
-    }, sectionRef);
+    const animate = async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsap.registerPlugin(ScrollTrigger);
 
-    return () => ctx.revert();
+      const el = sectionRef.current;
+      if (!el) return;
+
+      gsap.from(el.querySelectorAll(".reveal-up"), {
+        opacity: 0,
+        y: 40,
+        duration: 0.7,
+        stagger: 0.08,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 80%",
+          once: true,
+        },
+      });
+    };
+
+    animate();
   }, []);
 
   return (
     <section
-      ref={sectionRef}
       id="services"
-      className="mx-auto max-w-7xl px-6 py-24 lg:px-12 lg:py-36"
+      ref={sectionRef}
+      className="relative py-24 md:py-32 bg-dark"
     >
-      {/* Section header */}
-      <div className="mb-16 flex items-end justify-between">
-        <div>
-          <span className="text-sm font-medium uppercase tracking-[0.2em] text-gold">
-            What We Offer
-          </span>
-          <h2 className="mt-3 font-[family-name:var(--font-space-grotesk)] text-4xl font-bold tracking-[-0.03em] text-cream md:text-6xl">
-            Services
-          </h2>
-        </div>
-        <p className="hidden max-w-xs text-sm leading-relaxed text-muted md:block">
-          Walk-ins welcome. Every cut includes a consultation to get it right.
-        </p>
+      {/* Decorative barber pole stripes on sides */}
+      <div className="absolute left-8 top-0 bottom-0 hidden lg:block">
+        <div className="barber-stripe h-full" />
+      </div>
+      <div className="absolute right-8 top-0 bottom-0 hidden lg:block">
+        <div className="barber-stripe h-full" />
       </div>
 
-      {/* Service list */}
-      <div className="border-t border-cream/10">
-        {services.map((service) => (
-          <div
-            key={service.num}
-            className="service-item service-row group flex cursor-default items-center justify-between border-b border-cream/10 py-6 md:py-8"
-          >
-            <div className="flex items-center gap-6 md:gap-10">
-              <span className="text-sm text-gold/50">{service.num}</span>
-              <div>
-                <span className="font-[family-name:var(--font-space-grotesk)] text-lg font-semibold tracking-tight md:text-2xl">
-                  {service.name}
-                </span>
-                {service.desc && (
-                  <span className="ml-3 text-sm text-muted">
-                    ({service.desc})
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="font-[family-name:var(--font-space-grotesk)] text-lg font-bold text-gold md:text-xl">
+      <div className="mx-auto max-w-3xl px-6">
+        {/* Heading */}
+        <div className="text-center mb-16">
+          <p className="reveal-up text-gold text-sm tracking-[0.3em] uppercase mb-3 font-body">
+            What We Offer
+          </p>
+          <h2 className="reveal-up font-display text-5xl md:text-6xl tracking-wider text-cream">
+            THE MENU
+          </h2>
+          <div className="reveal-up w-16 h-0.5 bg-gold mx-auto mt-4" />
+        </div>
+
+        {/* Price list */}
+        <div className="space-y-0">
+          {services.map((service, i) => (
+            <div
+              key={service.name}
+              className={`reveal-up service-row flex items-baseline py-4 px-4 rounded-sm ${
+                i < services.length - 1
+                  ? "border-b border-cream/5"
+                  : ""
+              }`}
+            >
+              <span className="text-cream text-base md:text-lg font-body font-medium">
+                {service.name}
+              </span>
+              <span className="price-dots" />
+              <span className="text-gold font-display text-2xl md:text-3xl tracking-wide">
                 {service.price}
               </span>
-              <span className="service-arrow text-gold">→</span>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Bottom note */}
+        <p className="reveal-up text-center text-muted text-sm mt-10 font-body">
+          All services include consultation. Walk-ins welcome — no appointment
+          needed.
+        </p>
       </div>
     </section>
   );

@@ -2,131 +2,110 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
   { value: "8+", label: "Years" },
   { value: "15K+", label: "Cuts" },
-  { value: "4.9", label: "Stars" },
-  { value: "Walk-ins", label: "Welcome" },
+  { value: "4.9★", label: "Rating" },
+  { value: "Walk-Ins", label: "Welcome" },
 ];
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Parallax on image
-      if (imageRef.current) {
-        gsap.fromTo(
-          imageRef.current.querySelector("img"),
-          { yPercent: -10 },
-          {
-            yPercent: 10,
-            ease: "none",
-            scrollTrigger: {
-              trigger: imageRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            },
-          }
-        );
-      }
+    const animate = async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsap.registerPlugin(ScrollTrigger);
 
-      // Text reveal
-      gsap.fromTo(
-        ".about-text",
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: "power3.out",
-          stagger: 0.15,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 65%",
-          },
-        }
-      );
+      const el = sectionRef.current;
+      if (!el) return;
 
-      // Stats reveal
-      gsap.fromTo(
-        ".about-stat",
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          ease: "power3.out",
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: ".about-stats",
-            start: "top 80%",
-          },
-        }
-      );
-    }, sectionRef);
+      gsap.from(el.querySelectorAll(".reveal-up"), {
+        opacity: 0,
+        y: 40,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 80%",
+          once: true,
+        },
+      });
 
-    return () => ctx.revert();
+      gsap.from(el.querySelector(".about-image"), {
+        opacity: 0,
+        x: -60,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 75%",
+          once: true,
+        },
+      });
+    };
+
+    animate();
   }, []);
 
   return (
     <section
-      ref={sectionRef}
       id="about"
-      className="mx-auto max-w-7xl px-6 py-24 lg:px-12 lg:py-36"
+      ref={sectionRef}
+      className="py-24 md:py-32 bg-black"
     >
-      <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-24">
-        {/* Image */}
-        <div
-          ref={imageRef}
-          className="relative aspect-[3/4] overflow-hidden rounded-sm"
-        >
-          <Image
-            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
-            alt="Edison Barbershop barber"
-            fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-        </div>
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+          {/* Image */}
+          <div className="about-image relative aspect-[4/5] rounded-sm overflow-hidden">
+            <Image
+              src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&q=80"
+              alt="Inside Edison Barbershop"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            {/* Gold border accent */}
+            <div className="absolute inset-0 border border-gold/20 rounded-sm" />
+          </div>
 
-        {/* Content */}
-        <div>
-          <span className="about-text text-sm font-medium uppercase tracking-[0.2em] text-gold">
-            Our Story
-          </span>
-          <h2 className="about-text mt-4 font-[family-name:var(--font-space-grotesk)] text-4xl font-bold tracking-[-0.03em] text-cream md:text-5xl">
-            The Neighborhood&apos;s
-            <br />
-            Go-To Barbershop
-          </h2>
-          <p className="about-text mt-6 max-w-lg text-lg leading-relaxed text-cream/60">
-            Edison Barbershop has been the neighborhood&apos;s go-to for clean
-            cuts since day one. Our barbers are trained in both classic and
-            modern styles — from tight fades to traditional scissor cuts.
-          </p>
-          <p className="about-text mt-4 max-w-lg text-lg leading-relaxed text-cream/60">
-            We believe every person deserves to look and feel their best. That
-            means no rush jobs, just quality cuts at fair prices.
-          </p>
+          {/* Text */}
+          <div>
+            <p className="reveal-up text-gold text-sm tracking-[0.3em] uppercase mb-3 font-body">
+              About Us
+            </p>
+            <h2 className="reveal-up font-display text-4xl md:text-5xl tracking-wider text-cream mb-6">
+              THE SHOP
+            </h2>
+            <div className="reveal-up w-16 h-0.5 bg-gold mb-8" />
 
-          {/* Stats */}
-          <div className="about-stats mt-12 grid grid-cols-2 gap-8 sm:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.label} className="about-stat">
-                <div className="font-[family-name:var(--font-space-grotesk)] text-3xl font-bold text-gold">
-                  {stat.value}
+            <p className="reveal-up text-cream/70 text-lg leading-relaxed mb-6 font-body">
+              More than a barbershop — it&apos;s where Edison comes to look
+              sharp. Our experienced barbers blend classic techniques with modern
+              styles in a space that feels like home.
+            </p>
+            <p className="reveal-up text-cream/50 text-base leading-relaxed mb-10 font-body">
+              Since 2016, we&apos;ve been the neighborhood spot for fresh fades,
+              clean lineups, and hot towel shaves. No pretense, no appointments
+              needed — just great cuts and good vibes.
+            </p>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+              {stats.map((stat) => (
+                <div key={stat.label} className="reveal-up text-center">
+                  <div className="font-display text-3xl md:text-4xl text-gold tracking-wider">
+                    {stat.value}
+                  </div>
+                  <div className="text-cream/50 text-xs uppercase tracking-widest mt-1 font-body">
+                    {stat.label}
+                  </div>
                 </div>
-                <div className="mt-1 text-sm text-muted">{stat.label}</div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

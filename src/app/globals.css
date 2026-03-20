@@ -1,168 +1,58 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-black: #0A0A0A;
-  --color-cream: #F0EDE6;
-  --color-gold: #C9A96E;
-  --color-muted: #666666;
+  --color-black: #0F0F0F;
+  --color-dark: #1A1A1A;
+  --color-darkest: #0A0A0A;
+  --color-gold: #C8A35A;
+  --color-gold-light: #D4B46A;
+  --color-cream: #F5F0E8;
+  --color-muted: #8B7D6B;
   --color-card: #151515;
-  --font-display: var(--font-space-grotesk);
+  --font-display: var(--font-bebas-neue);
   --font-body: var(--font-inter);
 }
 
 /* ── Base ── */
 html {
-  background: #0A0A0A;
-  color: #F0EDE6;
+  background: #0F0F0F;
+  color: #F5F0E8;
   scroll-behavior: smooth;
 }
 
 body {
-  background: #0A0A0A;
-  color: #F0EDE6;
+  background: #0F0F0F;
+  color: #F5F0E8;
   font-family: var(--font-body), system-ui, sans-serif;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: #C9A96E;
-  color: #0A0A0A;
+  background: #C8A35A;
+  color: #0F0F0F;
 }
 
-/* ── Preloader ── */
-.preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #0A0A0A;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
+/* ── Navbar ── */
+.nav-solid {
+  background: rgba(15, 15, 15, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(200, 163, 90, 0.15);
 }
 
-.preloader.done {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+/* ── Price list dots ── */
+.price-dots {
+  flex: 1;
+  border-bottom: 2px dotted rgba(200, 163, 90, 0.2);
+  margin: 0 0.75rem;
+  position: relative;
+  bottom: 4px;
 }
 
-.preloader-text {
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-size: clamp(3rem, 8vw, 8rem);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  color: #F0EDE6;
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-}
-
-.preloader-text.reveal {
-  clip-path: inset(0 0% 0 0);
-}
-
-.preloader-bar {
-  width: 200px;
-  height: 2px;
-  background: #333;
-  margin-top: 2rem;
-  overflow: hidden;
-  border-radius: 1px;
-}
-
-.preloader-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: #C9A96E;
-  transition: width 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-}
-
-.preloader-bar-fill.fill {
-  width: 100%;
-}
-
-/* ── Custom Cursor ── */
-.custom-cursor {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #C9A96E;
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-}
-
-.custom-cursor.hover {
-  transform: translate(-50%, -50%) scale(2.5);
-  background: rgba(201, 169, 110, 0.1);
-}
-
-@media (pointer: coarse) {
-  .custom-cursor {
-    display: none;
-  }
-}
-
-/* ── Grain Overlay ── */
-.grain {
-  position: fixed;
-  inset: 0;
-  z-index: 9000;
-  pointer-events: none;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
-}
-
-/* ── Marquee ── */
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 20s linear infinite;
-}
-
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* ── Navbar glassmorphism ── */
-.nav-glass {
-  background: rgba(10, 10, 10, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(201, 169, 110, 0.1);
-}
-
-/* ── Service item hover ── */
-.service-item {
-  transition: color 0.3s ease, padding-left 0.3s ease;
-}
-
-.service-item:hover {
-  color: #C9A96E;
-  padding-left: 1rem;
-}
-
-.service-item:hover .service-arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.service-arrow {
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-/* ── Gallery grid ── */
+/* ── Gallery ── */
 .gallery-item {
   overflow: hidden;
+  position: relative;
 }
 
 .gallery-item img {
@@ -170,53 +60,78 @@ body {
 }
 
 .gallery-item:hover img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
-/* ── Smooth reveal animation ── */
-.reveal-up {
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 15, 15, 0.9) 0%, transparent 50%);
   opacity: 0;
-  transform: translateY(40px);
+  transition: opacity 0.4s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.25rem;
 }
 
-/* ── Testimonial card ── */
-.testimonial-card {
-  background: #151515;
-  border: 1px solid rgba(201, 169, 110, 0.1);
-  transition: border-color 0.3s ease;
+.gallery-item:hover .gallery-overlay {
+  opacity: 1;
 }
 
-.testimonial-card:hover {
-  border-color: rgba(201, 169, 110, 0.3);
+/* ── Review card ── */
+.review-card {
+  background: #1A1A1A;
+  border: 1px solid rgba(200, 163, 90, 0.12);
+  transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
-/* ── Ghost button ── */
-.btn-ghost {
-  border: 1px solid rgba(240, 237, 230, 0.3);
-  transition: border-color 0.3s ease, background 0.3s ease;
+.review-card:hover {
+  border-color: rgba(200, 163, 90, 0.35);
+  transform: translateY(-4px);
 }
 
-.btn-ghost:hover {
-  border-color: #F0EDE6;
-  background: rgba(240, 237, 230, 0.05);
-}
-
-/* ── Gold button ── */
+/* ── Buttons ── */
 .btn-gold {
-  background: #C9A96E;
-  color: #0A0A0A;
+  background: #C8A35A;
+  color: #0F0F0F;
+  font-weight: 700;
   transition: background 0.3s ease, transform 0.1s ease;
 }
 
 .btn-gold:hover {
-  background: #d4b87e;
+  background: #D4B46A;
 }
 
 .btn-gold:active {
   transform: scale(0.98);
 }
 
-/* ── Hide scrollbar for Lenis ── */
+.btn-ghost {
+  border: 1px solid rgba(245, 240, 232, 0.3);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.btn-ghost:hover {
+  border-color: #F5F0E8;
+  background: rgba(245, 240, 232, 0.05);
+}
+
+/* ── Reveal animation ── */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* ── Service row hover ── */
+.service-row {
+  transition: background 0.3s ease;
+}
+
+.service-row:hover {
+  background: rgba(200, 163, 90, 0.05);
+}
+
+/* ── Lenis ── */
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -231,4 +146,33 @@ html.lenis, html.lenis body {
 
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+/* ── Barber pole stripes ── */
+@keyframes pole-spin {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 60px; }
+}
+
+.barber-stripe {
+  width: 4px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    180deg,
+    #C8A35A 0px,
+    #C8A35A 10px,
+    #0F0F0F 10px,
+    #0F0F0F 15px,
+    #fff 15px,
+    #fff 25px,
+    #0F0F0F 25px,
+    #0F0F0F 30px
+  );
+  animation: pole-spin 2s linear infinite;
+}
+
+/* ── Stat counter ── */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
