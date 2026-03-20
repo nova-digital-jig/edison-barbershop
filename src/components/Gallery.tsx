@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import {
+  clipRevealUp,
+  fadeUp,
+  scaleReveal,
+  staggerContainer,
+  viewportConfig,
+} from "@/lib/animations";
 
 const cuts = [
   {
@@ -31,72 +38,50 @@ const cuts = [
 ];
 
 export default function Gallery() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const animate = async () => {
-      const { gsap } = await import("gsap");
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
-      const el = sectionRef.current;
-      if (!el) return;
-
-      gsap.from(el.querySelectorAll(".reveal-up"), {
-        opacity: 0,
-        y: 40,
-        duration: 0.7,
-        stagger: 0.08,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: el,
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      gsap.from(el.querySelectorAll(".gallery-item"), {
-        opacity: 0,
-        y: 50,
-        scale: 0.95,
-        duration: 0.7,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: el.querySelector(".gallery-grid"),
-          start: "top 85%",
-          once: true,
-        },
-      });
-    };
-
-    animate();
-  }, []);
-
   return (
-    <section
-      id="gallery"
-      ref={sectionRef}
-      className="py-24 md:py-32 bg-dark"
-    >
+    <section id="gallery" className="py-24 md:py-32 bg-dark">
       <div className="mx-auto max-w-7xl px-6">
         {/* Heading */}
-        <div className="text-center mb-16">
-          <p className="reveal-up text-gold text-sm tracking-[0.3em] uppercase mb-3 font-body">
+        <motion.div
+          className="text-center mb-16"
+          variants={staggerContainer(0.1)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+        >
+          <motion.p
+            className="text-gold text-sm tracking-[0.3em] uppercase mb-3 font-body"
+            variants={fadeUp}
+          >
             Fresh Cuts
-          </p>
-          <h2 className="reveal-up font-display text-5xl md:text-6xl tracking-wider text-cream">
+          </motion.p>
+          <motion.h2
+            className="font-display text-5xl md:text-6xl tracking-wider text-cream"
+            variants={clipRevealUp}
+          >
             OUR WORK
-          </h2>
-          <div className="reveal-up w-16 h-0.5 bg-gold mx-auto mt-4" />
-        </div>
+          </motion.h2>
+          <motion.div className="w-16 h-0.5 bg-gold mx-auto mt-4" variants={fadeUp} />
+        </motion.div>
 
         {/* Grid */}
-        <div className="gallery-grid grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        <motion.div
+          className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4"
+          variants={staggerContainer(0.1)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+        >
           {cuts.map((cut) => (
-            <div
+            <motion.div
               key={cut.label}
-              className="gallery-item relative aspect-square rounded-sm cursor-pointer"
+              className="gallery-item relative aspect-square rounded-sm cursor-pointer overflow-hidden"
+              variants={scaleReveal}
+              whileHover={{
+                y: -8,
+                boxShadow: "0 0 0 2px #C8A35A",
+                transition: { duration: 0.3 },
+              }}
             >
               <Image
                 src={cut.src}
@@ -110,9 +95,9 @@ export default function Gallery() {
                   {cut.label.toUpperCase()}
                 </span>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

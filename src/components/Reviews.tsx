@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import {
+  clipRevealUp,
+  fadeUp,
+  slideFromRight,
+  staggerContainer,
+  viewportConfig,
+} from "@/lib/animations";
 
 const reviews = [
   {
@@ -43,72 +50,55 @@ function Stars({ count }: { count: number }) {
   );
 }
 
+const cardSlide = {
+  hidden: { opacity: 0, x: 60 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.6, ease: [0.77, 0, 0.175, 1] as const },
+  },
+};
+
 export default function Reviews() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const animate = async () => {
-      const { gsap } = await import("gsap");
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
-      const el = sectionRef.current;
-      if (!el) return;
-
-      gsap.from(el.querySelectorAll(".reveal-up"), {
-        opacity: 0,
-        y: 40,
-        duration: 0.7,
-        stagger: 0.08,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: el,
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      gsap.from(el.querySelectorAll(".review-card"), {
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        stagger: 0.12,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: el.querySelector(".reviews-grid"),
-          start: "top 85%",
-          once: true,
-        },
-      });
-    };
-
-    animate();
-  }, []);
-
   return (
-    <section
-      id="reviews"
-      ref={sectionRef}
-      className="py-24 md:py-32 bg-black"
-    >
+    <section id="reviews" className="py-24 md:py-32 bg-black">
       <div className="mx-auto max-w-7xl px-6">
         {/* Heading */}
-        <div className="text-center mb-16">
-          <p className="reveal-up text-gold text-sm tracking-[0.3em] uppercase mb-3 font-body">
+        <motion.div
+          className="text-center mb-16"
+          variants={staggerContainer(0.1)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+        >
+          <motion.p
+            className="text-gold text-sm tracking-[0.3em] uppercase mb-3 font-body"
+            variants={fadeUp}
+          >
             Testimonials
-          </p>
-          <h2 className="reveal-up font-display text-5xl md:text-6xl tracking-wider text-cream">
+          </motion.p>
+          <motion.h2
+            className="font-display text-5xl md:text-6xl tracking-wider text-cream"
+            variants={clipRevealUp}
+          >
             WHAT THEY SAY
-          </h2>
-          <div className="reveal-up w-16 h-0.5 bg-gold mx-auto mt-4" />
-        </div>
+          </motion.h2>
+          <motion.div className="w-16 h-0.5 bg-gold mx-auto mt-4" variants={fadeUp} />
+        </motion.div>
 
-        {/* Cards */}
-        <div className="reviews-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Cards — slide from right with stagger */}
+        <motion.div
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"
+          variants={staggerContainer(0.12)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+        >
           {reviews.map((review) => (
-            <div
+            <motion.div
               key={review.name}
               className="review-card rounded-sm p-6"
+              variants={cardSlide}
             >
               {/* Quote mark */}
               <span className="font-display text-5xl text-gold/30 leading-none block mb-2">
@@ -131,9 +121,9 @@ export default function Reviews() {
                   <p className="text-muted text-xs font-body">Google Review</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
