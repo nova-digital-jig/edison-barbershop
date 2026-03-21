@@ -132,7 +132,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="text-gold/50 hover:text-gold transition-colors"
             >
-              Nova Digital
+              Vektor
             </a>
           </p>
         </div>
